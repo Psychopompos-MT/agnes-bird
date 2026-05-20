@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://psychopompos-mt.github.io/agnes-bird/sitemap.xml
