@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kvízy | Anežčin blog</title>
+  <meta name="description" content="Výběr školních kvízů pro 3. třídu od Anežky Tiché.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-list">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html">Anežčin blog</a>
+      <nav class="topnav">
+        <a href="index.html">O mně</a>
+        <a href="kvizy.html" aria-current="page">Kvízy</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-header">
+        <p class="eyebrow">Seznam kvízů</p>
+        <h1>Vyber si téma, které tě nejvíc baví</h1>
+        <p>
+          Každý kvíz obsahuje 50 otázek a obtížnost roste postupně od lehkých po těžší.
+        </p>
+      </section>
+
+      <section class="quiz-grid" id="quiz-list"></section>
+    </main>
+  </div>
+
+  <script src="quiz-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

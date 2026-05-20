@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kvíz | Anežčin blog</title>
+  <meta name="description" content="Školní kvízy pro 3. třídu od Anežky Tiché.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-quiz">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html">Anežčin blog</a>
+      <nav class="topnav">
+        <a href="index.html">O mně</a>
+        <a href="kvizy.html">Kvízy</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-header compact">
+        <p class="eyebrow" id="quiz-subtitle">Kvíz pro šikulky</p>
+        <h1 id="quiz-title">Načítám kvíz...</h1>
+        <p id="quiz-description"></p>
+      </section>
+
+      <section class="quiz-stage" id="quiz-app">
+        <div class="progress-card">
+          <div class="progress-labels">
+            <span id="progress-text">Otázka 1 z 50</span>
+            <span id="score-text">Skóre: 0</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <article class="question-card" id="question-card">
+          <span class="difficulty-chip" id="difficulty-chip">Lehký start</span>
+          <h2 id="question-text"></h2>
+          <div id="answer-area"></div>
+          <p class="helper-text" id="helper-text">
+            Vyber jednu správnou odpověď.
+          </p>
+        </article>
+
+        <section class="result-card hidden" id="result-card">
+          <p class="eyebrow">Hotovo</p>
+          <h2 id="result-title">Kvíz je za tebou</h2>
+          <p id="result-score"></p>
+          <p id="result-message"></p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="kvizy.html">Vybrat další kvíz</a>
+            <button class="button button-secondary" id="restart-button" type="button">Zkusit znovu</button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="feedback-burst" id="feedback-burst" aria-live="polite" aria-atomic="true">
+    <div class="feedback-face" id="feedback-face">🙂</div>
+    <p class="feedback-message" id="feedback-message">Skvěle!</p>
+  </div>
+
+  <script src="quiz-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
