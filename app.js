@@ -54,6 +54,13 @@ function normalizeAnswer(value) {
     .replace(/\s+/g, " ");
 }
 
+function updateMetaContent(id, content) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.setAttribute("content", content);
+  }
+}
+
 function renderQuizList() {
   const host = document.getElementById("quiz-list");
   if (!host) {
@@ -101,6 +108,18 @@ function startQuizPage() {
   }
 
   document.title = `${quiz.title} | Anežčin blog`;
+  const quizUrl = `https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=${quizId}`;
+  const quizDescription = `${quiz.description} Vyzkoušej si 50 otázek pro 3. třídu.`;
+  updateMetaContent("meta-description", quizDescription);
+  updateMetaContent("og-title", `${quiz.title} | Anežčin blog`);
+  updateMetaContent("og-description", quizDescription);
+  updateMetaContent("og-url", quizUrl);
+  updateMetaContent("twitter-title", `${quiz.title} | Anežčin blog`);
+  updateMetaContent("twitter-description", quizDescription);
+  const canonicalLink = document.getElementById("canonical-link");
+  if (canonicalLink) {
+    canonicalLink.setAttribute("href", quizUrl);
+  }
   document.getElementById("quiz-subtitle").textContent = quiz.subtitle;
   document.getElementById("quiz-title").textContent = quiz.title;
   document.getElementById("quiz-description").textContent = quiz.description;

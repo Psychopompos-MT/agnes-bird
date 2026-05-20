@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://psychopompos-mt.github.io/agnes-bird/index.html</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/</loc>
   </url>
   <url>
     <loc>https://psychopompos-mt.github.io/agnes-bird/kvizy.html</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=prvouka</loc>
+  </url>
+  <url>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=matematika</loc>
+  </url>
+  <url>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=cestina</loc>
+  </url>
+  <url>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=vyjmenovana-slova</loc>
+  </url>
+  <url>
+    <loc>https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=anglictina</loc>
   </url>
 </urlset>
