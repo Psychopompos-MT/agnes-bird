@@ -5,6 +5,7 @@ const quizCatalog = [
     title: "Prvouka",
     description: "Příroda, člověk, bezpečí i svět kolem nás pro 3. třídu.",
     detail: "3 možnosti, 50 otázek",
+    path: "prvouka.html",
   },
   {
     id: "matematika",
@@ -12,6 +13,7 @@ const quizCatalog = [
     title: "Matematika",
     description: "Počítání, násobilka, slovní úlohy a trocha přemýšlení.",
     detail: "3 možnosti, 50 otázek",
+    path: "matematika.html",
   },
   {
     id: "cestina",
@@ -19,6 +21,7 @@ const quizCatalog = [
     title: "Čeština",
     description: "Slova, věty, slovní druhy i jednoduchá gramatika.",
     detail: "3 možnosti, 50 otázek",
+    path: "cestina.html",
   },
   {
     id: "vyjmenovana-slova",
@@ -26,6 +29,7 @@ const quizCatalog = [
     title: "Vyjmenovaná slova",
     description: "Doplňování i/y ve slovech od lehkých po těžší.",
     detail: "3 možnosti, 50 otázek",
+    path: "vyjmenovana-slova.html",
   },
   {
     id: "anglictina",
@@ -33,8 +37,11 @@ const quizCatalog = [
     title: "Angličtina",
     description: "Uvidíš české slovo a napíšeš anglický překlad.",
     detail: "Textbox, 50 otázek",
+    path: "anglictina.html",
   },
 ];
+
+const quizCatalogById = Object.fromEntries(quizCatalog.map((quiz) => [quiz.id, quiz]));
 
 function difficultyLabel(index, total) {
   const part = (index + 1) / total;
@@ -61,6 +68,23 @@ function updateMetaContent(id, content) {
   }
 }
 
+function getQuizUrl(quiz) {
+  if (typeof window === "undefined") {
+    return `https://psychopompos-mt.github.io/agnes-bird/${quiz.path}`;
+  }
+
+  const existingCanonical = document.getElementById("canonical-link")?.getAttribute("href");
+  if (existingCanonical && !window.location.search) {
+    return existingCanonical;
+  }
+
+  if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+    return new URL(quiz.path, window.location.origin + window.location.pathname.replace(/[^/]*$/, "")).toString();
+  }
+
+  return quiz.path;
+}
+
 function renderQuizList() {
   const host = document.getElementById("quiz-list");
   if (!host) {
@@ -78,7 +102,7 @@ function renderQuizList() {
           <h2>${quiz.title}</h2>
           <p>${quiz.description}</p>
         </div>
-        <a class="button button-primary" href="quiz.html?quiz=${quiz.id}">Spustit kvíz</a>
+        <a class="button button-primary" href="${quiz.path}">Spustit kvíz</a>
       </article>
     `)
     .join("");
@@ -90,9 +114,16 @@ function startQuizPage() {
     return;
   }
 
+  const bodyQuizId = document.body.dataset.quizId;
   const params = new URLSearchParams(window.location.search);
-  const quizId = params.get("quiz");
+  const queryQuizId = params.get("quiz");
+  const quizId = bodyQuizId || queryQuizId;
   const quiz = window.quizData?.[quizId];
+
+  if (!bodyQuizId && queryQuizId && quizCatalogById[queryQuizId]) {
+    window.location.replace(quizCatalogById[queryQuizId].path);
+    return;
+  }
 
   if (!quiz) {
     quizTitle.textContent = "Kvíz se nenašel";
@@ -108,7 +139,7 @@ function startQuizPage() {
   }
 
   document.title = `${quiz.title} | Anežčin blog`;
-  const quizUrl = `https://psychopompos-mt.github.io/agnes-bird/quiz.html?quiz=${quizId}`;
+  const quizUrl = getQuizUrl(quizCatalogById[quizId]);
   const quizDescription = `${quiz.description} Vyzkoušej si 50 otázek pro 3. třídu.`;
   updateMetaContent("meta-description", quizDescription);
   updateMetaContent("og-title", `${quiz.title} | Anežčin blog`);
