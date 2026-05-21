@@ -115,6 +115,7 @@ main {
 .hero,
 .highlight-panel,
 .page-header,
+.community-card,
 .question-card,
 .result-card,
 .progress-card,
@@ -338,6 +339,63 @@ main {
   gap: 18px;
 }
 
+.community-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px;
+}
+
+.community-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.community-copy h2 {
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+}
+
+.community-stats,
+.card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(108, 167, 255, 0.12);
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.stat-pill strong {
+  margin-right: 6px;
+}
+
+.community-note,
+.stats-mode-note {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.stats-mode-note {
+  margin: -6px 0 0;
+}
+
+.like-button {
+  min-width: 180px;
+}
+
+.like-button.is-liked {
+  background: linear-gradient(135deg, rgba(255, 93, 115, 0.16), rgba(255, 159, 67, 0.18));
+  border-color: rgba(255, 93, 115, 0.24);
+}
+
 .progress-labels {
   display: flex;
   justify-content: space-between;
@@ -546,6 +604,11 @@ main {
   }
 
   .highlight-panel {
+    display: grid;
+  }
+
+  .community-card {
+    grid-template-columns: 1fr;
     display: grid;
   }
 }

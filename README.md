@@ -8,6 +8,7 @@ Web obsahuje:
 - stránku se seznamem kvízů
 - 5 školních kvízů pro 3. třídu
 - průběžné skóre, animace po odpovědi a závěrečné vyhodnocení
+- počítadla otevření, dokončení a lajků pro každý kvíz
 
 ## Kvízy
 
@@ -27,6 +28,9 @@ Každý kvíz má 50 otázek. První 4 kvízy mají výběr ze 3 možností, ang
 - `styles.css` - vzhled webu
 - `app.js` - logika webu a kvízů
 - `quiz-data.js` - všechna data otázek
+- `stats-config.js` - přepnutí mezi lokálním a Firebase režimem počítadel
+- `stats-service.js` - logika počítadel a lajků
+- `FIREBASE_SETUP.md` - návod pro sdílená počítadla přes Firebase
 - `Photos/AgnesPhoto.jpg` - profilová fotografie
 
 ## Spuštění lokálně

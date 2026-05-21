@@ -43,6 +43,9 @@ const quizCatalog = [
 
 const quizCatalogById = Object.fromEntries(quizCatalog.map((quiz) => [quiz.id, quiz]));
 
+const numberFormatter = new Intl.NumberFormat("cs-CZ");
+const EMPTY_STATS = { views: 0, completions: 0, likes: 0 };
+
 function difficultyLabel(index, total) {
   const part = (index + 1) / total;
   if (part <= 0.34) {
@@ -68,6 +71,88 @@ function updateMetaContent(id, content) {
   }
 }
 
+function formatCount(value) {
+  return numberFormatter.format(Number(value || 0));
+}
+
+function getStatsService() {
+  if (window.quizStatsReady) {
+    return window.quizStatsReady;
+  }
+
+  return new Promise((resolve) => {
+    let tries = 0;
+    const maxTries = 80;
+    const interval = window.setInterval(() => {
+      if (window.quizStatsReady) {
+        window.clearInterval(interval);
+        window.quizStatsReady.then(resolve);
+        return;
+      }
+
+      tries += 1;
+      if (tries >= maxTries) {
+        window.clearInterval(interval);
+        resolve(null);
+      }
+    }, 50);
+  });
+}
+
+function renderStatsSummary(stats) {
+  return `
+    <span class="stat-pill"><strong>Otevření:</strong> ${formatCount(stats.views)}</span>
+    <span class="stat-pill"><strong>Dokončeno:</strong> ${formatCount(stats.completions)}</span>
+    <span class="stat-pill"><strong>Lajky:</strong> ${formatCount(stats.likes)}</span>
+  `;
+}
+
+function createQuizStatsPanel(quizId) {
+  const stage = document.getElementById("quiz-app");
+  if (!stage) {
+    return null;
+  }
+
+  const panel = document.createElement("section");
+  panel.className = "community-card";
+  panel.innerHTML = `
+    <div class="community-copy">
+      <p class="eyebrow">Oblíbenost kvízu</p>
+      <h2>Kdo už si kvíz zkusil</h2>
+      <div class="community-stats" id="community-stats">
+        ${renderStatsSummary({ views: 0, completions: 0, likes: 0 })}
+      </div>
+      <p class="community-note" id="community-note"></p>
+    </div>
+    <button class="button button-secondary like-button" id="like-button" type="button">
+      <span id="like-button-label">Přidat like</span>
+    </button>
+  `;
+
+  stage.prepend(panel);
+
+  return {
+    quizId,
+    statsHost: panel.querySelector("#community-stats"),
+    note: panel.querySelector("#community-note"),
+    likeButton: panel.querySelector("#like-button"),
+    likeLabel: panel.querySelector("#like-button-label"),
+  };
+}
+
+function updateQuizStatsPanel(panel, stats, liked, mode) {
+  if (!panel) {
+    return;
+  }
+
+  panel.statsHost.innerHTML = renderStatsSummary(stats);
+  panel.likeButton.classList.toggle("is-liked", liked);
+  panel.likeLabel.textContent = liked ? "Už se mi líbí" : "Přidat like";
+  panel.note.textContent = mode === "firebase"
+    ? "Počítadlo je sdílené pro všechny návštěvníky."
+    : "Zatím běží lokální režim v tomto prohlížeči. Pro sdílené počítadlo propoj Firebase.";
+}
+
 function getQuizUrl(quiz) {
   if (typeof window === "undefined") {
     return `https://psychopompos-mt.github.io/agnes-bird/${quiz.path}`;
@@ -85,7 +170,7 @@ function getQuizUrl(quiz) {
   return quiz.path;
 }
 
-function renderQuizList() {
+async function renderQuizList() {
   const host = document.getElementById("quiz-list");
   if (!host) {
     return;
@@ -102,13 +187,34 @@ function renderQuizList() {
           <h2>${quiz.title}</h2>
           <p>${quiz.description}</p>
         </div>
+        <div class="card-stats" data-quiz-card-stats="${quiz.id}">
+          ${renderStatsSummary({ views: 0, completions: 0, likes: 0 })}
+        </div>
         <a class="button button-primary" href="${quiz.path}">Spustit kvíz</a>
       </article>
     `)
     .join("");
+
+  const statsService = await getStatsService();
+  if (!statsService) {
+    return;
+  }
+
+  const allStats = await statsService.getAllStats(quizCatalog.map((quiz) => quiz.id));
+  const note = document.createElement("p");
+  note.className = "stats-mode-note";
+  note.textContent = statsService.mode === "firebase"
+    ? "Počítadla jsou sdílená pro všechny návštěvníky."
+    : "Počítadla teď běží v lokálním režimu v tomto prohlížeči.";
+  host.before(note);
+
+  document.querySelectorAll("[data-quiz-card-stats]").forEach((element) => {
+    const quizId = element.getAttribute("data-quiz-card-stats");
+    element.innerHTML = renderStatsSummary(allStats[quizId] || EMPTY_STATS);
+  });
 }
 
-function startQuizPage() {
+async function startQuizPage() {
   const quizTitle = document.getElementById("quiz-title");
   if (!quizTitle) {
     return;
@@ -171,11 +277,25 @@ function startQuizPage() {
   const feedbackBurst = document.getElementById("feedback-burst");
   const feedbackFace = document.getElementById("feedback-face");
   const feedbackMessage = document.getElementById("feedback-message");
+  const statsPanel = createQuizStatsPanel(quizId);
+  const statsService = await getStatsService();
+  let completionSaved = false;
 
   let currentIndex = 0;
   let score = 0;
   let lock = false;
   let feedbackTimer = null;
+
+  if (statsPanel && statsService) {
+    const firstStats = await statsService.recordView(quizId);
+    updateQuizStatsPanel(statsPanel, firstStats, statsService.isLiked(quizId), statsService.mode);
+    statsPanel.likeButton.addEventListener("click", async () => {
+      statsPanel.likeButton.disabled = true;
+      const result = await statsService.toggleLike(quizId);
+      updateQuizStatsPanel(statsPanel, result.stats, result.liked, statsService.mode);
+      statsPanel.likeButton.disabled = false;
+    });
+  }
 
   function showFeedback(isCorrect) {
     feedbackBurst.className = `feedback-burst visible ${isCorrect ? "correct" : "wrong"}`;
@@ -188,12 +308,18 @@ function startQuizPage() {
     }, 950);
   }
 
-  function finishQuiz() {
+  async function finishQuiz() {
     questionCard.classList.add("hidden");
     resultCard.classList.remove("hidden");
 
     const total = quiz.questions.length;
     const percent = Math.round((score / total) * 100);
+
+    if (!completionSaved && statsService) {
+      completionSaved = true;
+      const completionStats = await statsService.recordCompletion(quizId);
+      updateQuizStatsPanel(statsPanel, completionStats, statsService.isLiked(quizId), statsService.mode);
+    }
 
     resultTitle.textContent = `Máš hotovo: ${quiz.title}`;
     resultScore.textContent = `Správně ${score} z ${total} otázek (${percent} %).`;
