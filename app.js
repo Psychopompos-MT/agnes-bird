@@ -6,6 +6,7 @@ const quizCatalog = [
     description: "Příroda, člověk, bezpečí i svět kolem nás pro 3. třídu.",
     detail: "3 možnosti, 50 otázek",
     path: "prvouka.html",
+    createdDate: "2026-05-20",
   },
   {
     id: "matematika",
@@ -14,6 +15,7 @@ const quizCatalog = [
     description: "Počítání, násobilka, slovní úlohy a trocha přemýšlení.",
     detail: "3 možnosti, 50 otázek",
     path: "matematika.html",
+    createdDate: "2026-05-20",
   },
   {
     id: "cestina",
@@ -22,6 +24,7 @@ const quizCatalog = [
     description: "Slova, věty, slovní druhy i jednoduchá gramatika.",
     detail: "3 možnosti, 50 otázek",
     path: "cestina.html",
+    createdDate: "2026-05-20",
   },
   {
     id: "vyjmenovana-slova",
@@ -30,6 +33,7 @@ const quizCatalog = [
     description: "Doplňování i/y ve slovech od lehkých po těžší.",
     detail: "3 možnosti, 50 otázek",
     path: "vyjmenovana-slova.html",
+    createdDate: "2026-05-20",
   },
   {
     id: "anglictina",
@@ -38,6 +42,7 @@ const quizCatalog = [
     description: "Uvidíš české slovo a napíšeš anglický překlad.",
     detail: "Textbox, 50 otázek",
     path: "anglictina.html",
+    createdDate: "2026-05-20",
   },
   {
     id: "predmet-prisudek",
@@ -46,6 +51,7 @@ const quizCatalog = [
     description: "Krátká lekce, kvíz a hra na procvičení podmětu a přísudku.",
     detail: "Lekce + mini kvíz a hra",
     path: "predmet-prisudek.html",
+    createdDate: "2026-09-21",
   },
 ];
 
@@ -190,6 +196,7 @@ async function renderQuizList() {
         <div class="quiz-meta">
           <span class="meta-pill">${quiz.icon} ${quiz.title}</span>
           <span class="meta-pill">${quiz.detail}</span>
+          <span class="meta-pill">Vytvořeno: ${quiz.createdDate || ''}</span>
         </div>
         <div>
           <h2>${quiz.title}</h2>
@@ -268,6 +275,18 @@ async function startQuizPage() {
   document.getElementById("quiz-subtitle").textContent = quiz.subtitle;
   document.getElementById("quiz-title").textContent = quiz.title;
   document.getElementById("quiz-description").textContent = quiz.description;
+  // show created date under the description if available
+  const descEl = document.getElementById("quiz-description");
+  if (descEl) {
+    let createdEl = document.getElementById("quiz-created");
+    if (!createdEl) {
+      createdEl = document.createElement("p");
+      createdEl.id = "quiz-created";
+      createdEl.className = "created-text";
+      descEl.after(createdEl);
+    }
+    createdEl.textContent = quiz.createdDate ? `Vytvořeno: ${quiz.createdDate}` : "";
+  }
 
   const progressText = document.getElementById("progress-text");
   const scoreText = document.getElementById("score-text");
