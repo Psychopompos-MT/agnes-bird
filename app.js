@@ -39,6 +39,14 @@ const quizCatalog = [
     detail: "Textbox, 50 otázek",
     path: "anglictina.html",
   },
+  {
+    id: "predmet-prisudek",
+    icon: "✍️",
+    title: "Podmět a přísudek",
+    description: "Krátká lekce, kvíz a hra na procvičení podmětu a přísudku.",
+    detail: "Lekce + mini kvíz a hra",
+    path: "predmet-prisudek.html",
+  },
 ];
 
 const quizCatalogById = Object.fromEntries(quizCatalog.map((quiz) => [quiz.id, quiz]));

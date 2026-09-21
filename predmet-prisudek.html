@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podmět a přísudek | Anežčin blog</title>
+  <meta name="description" content="Krátká lekce o podmětu a přísudku + kvíz a hra pro procvičení.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://psychopompos-mt.github.io/agnes-bird/predmet-prisudek.html">
+</head>
+<body class="page-lesson">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html">Anežčin blog</a>
+      <nav class="topnav">
+        <a href="index.html">O mně</a>
+        <a href="kvizy.html">Kvízy</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-header">
+        <p class="eyebrow">Lekce</p>
+        <h1>Podmět a přísudek</h1>
+        <p>Krátké vysvětlení a jednoduchý kvíz a hra k procvičení, co je ve větě podmět a co přísudek.</p>
+      </section>
+
+      <section class="lesson-copy">
+        <h2>Vysvětlení</h2>
+        <p>Ve větě hledáme podmět otázkami <strong>Kdo?</strong> nebo <strong>Co?</strong> Podmět je obvykle osoba nebo věc, o které mluvíme. Přísudek nám říká, co podmět dělá nebo co s ním je — často je to sloveso (např. <em>běží</em>, <em>čte</em>, <em>spí</em>).</p>
+        <p>Příklad: <em>Pes (podmět) štěká (přísudek).</em></p>
+      </section>
+
+      <section id="quiz-section">
+        <h2>Kvíz: Najdi podmět nebo přísudek</h2>
+        <div id="quiz-card" class="question-card">
+          <p id="quiz-question" class="question-text"></p>
+          <div id="quiz-answers" class="answer-area"></div>
+          <p id="quiz-helper" class="helper-text"></p>
+          <div class="quiz-controls">
+            <span id="quiz-progress"></span>
+            <button id="quiz-restart" class="button" type="button">Zkoušet znovu</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-section">
+        <h2>Hra: Přiřaď podmět k přísudku</h2>
+        <p>Klikni nejprve na podmět a pak na přísudek, aby vznikla správná dvojice.</p>
+        <div id="game-board" class="game-board">
+          <div id="subjects" class="game-column"></div>
+          <div id="predicates" class="game-column"></div>
+        </div>
+        <p id="game-score" class="helper-text"></p>
+        <button id="game-reset" class="button" type="button">Restartovat hru</button>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="predmet-prisudek.js"></script>
+</body>
+</html>
